@@ -20,7 +20,10 @@ void solve()
     dfa.init();
     while (fgets(cache, 10000, fin))
     {
-        printf("Process: %s\n", cache);
+        int l = strlen(cache);
+        while (l > 0 && cache[l] < 32) --l;
+        cache[l + 1] = '\0';
+        printf("Process: [%s]\n", cache);
         dfa.process(string(cache));
     }
     dfa.stop();

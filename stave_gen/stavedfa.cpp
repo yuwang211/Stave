@@ -4,6 +4,7 @@ void StaveDFA::init()
     begin_time[0] = 0;
     last_time[0] = 0;
     speed[0] = DEFAULT_SPEED;
+    vol[0] = DEFAULT_VOL;
     song.resize(44100);
 }
 
@@ -72,7 +73,8 @@ void StaveDFA::processToken(string s)
     {
         begin_time[stack_size + 1] = begin_time[stack_size] + last_time[stack_size];
         last_time[++stack_size] = 0;
-        speed[stack_size] = DEFAULT_SPEED;
+        speed[stack_size] = speed[stack_size - 1];
+        vol[stack_size] = vol[stack_size - 1];
     }
     else if (s == "}")
     {
@@ -82,6 +84,21 @@ void StaveDFA::processToken(string s)
     else if (s == ",")
     {
         last_time[stack_size] = 0;
+    }
+    else if (s[0] == '#')
+    {
+        string t = "";
+        int i = 1;
+        while (i < s.size() && s[i] != '=')
+        {
+            t = t + s[i];
+            ++i;
+        }
+        string t2 = s.substr(i + 1, s.size() - i - 1);
+        if (t == "vol")
+        {
+            vol[stack_size] = atoi(t2.c_str());
+        }
     }
     else
     {
@@ -150,6 +167,16 @@ void StaveDFA::putNote(int id, double s, double t)
         for (int i = os; i < ns; ++i)
             song[i] = 0;
     }
-    for (int i = 0; i < tf; ++i)
-        song[sf + i] += baseline[bf + i];
+    if (tf < 44100 * 4)
+    {
+        for (int i = 0; i < tf; ++i)
+            song[sf + i] += baseline[bf + i] * vol[stack_size] / 100.0;
+    }
+    else
+    {
+        for (int i = 0; i < 44100 * 4; ++i)
+            song[sf + i] += baseline[bf + i] * vol[stack_size] / 100.0;
+        for (int i = 44100 * 4; i < tf; ++i)
+            song[sf + i] += baseline[bf + 44100 * 4 - 1000 + i % 1000] * vol[stack_size] / 100.0;
+    }
 }

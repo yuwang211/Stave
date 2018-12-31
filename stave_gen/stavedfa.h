@@ -23,11 +23,13 @@ class StaveDFA{
     
         static const int STACK_LEN = 100;
         static constexpr double DEFAULT_SPEED = 60.0 / 96.0;
+        static const int DEFAULT_VOL = 100;
     
         int stack_size;
         double begin_time[STACK_LEN];
         double last_time[STACK_LEN];
         double speed[STACK_LEN];
+        int vol[STACK_LEN];
     
         Block<double> baseline;
         Block<double> song;
