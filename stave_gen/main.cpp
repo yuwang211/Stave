@@ -4,7 +4,7 @@
 using namespace tplib;
 using std::string;
 
-const string BASELINE_FILE = "wav/baseline.wav";
+const string BASELINE_FILE = "wav/baseline014.wav";
 const string NOTE_FILE = "note/hhxdt.txt";
 
 char cache[10000];
