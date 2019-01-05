@@ -139,16 +139,16 @@ void StaveDFA::processToken(string s)
 void StaveDFA::loadBaseline(string fn)
 {
     int n;
-    tplib::Signal<Block<double> > s;
-    n = s.getWavSize(fn);
+    //tplib::Signal<Block<double> > s;
+    n = SignalProc::getWavSize(fn);
     baseline.resize(n);
-    s.loadWav(baseline, fn, n);
+    SignalProc::loadWav(baseline, fn, n);
 }
 
 void StaveDFA::saveSong(string fn)
 {
-    tplib::Signal<Block<double> > s;
-    s.saveWav(song, fn, (int)((begin_time[stack_size] + last_time[stack_size]) * 44100));
+    //tplib::Signal<Block<double> > s;
+    SignalProc::saveWav(song, fn, (int)((begin_time[stack_size] + last_time[stack_size]) * 44100));
 }
 
 void StaveDFA::putNote(int id, double s, double t)
